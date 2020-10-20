@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block nav_topic_active %}active{% endblock %}
+{% block content %}
+<body><p><a href="{% url 'learning_logs:topic' topic_id %}"  style="color:#000">{{topic}}</a></p>
+  <p>Delete entry:</p>
+  <form action="{% url 'learning_logs:del_entry' entry_id %}" method='post'>
+  {% csrf_token %}
+  {{ form.as_p }}
+  </form>
+  </body> 
+{% endblock content %}

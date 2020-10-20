@@ -1,0 +1,116 @@
+
+{% extends 'base.html' %}
+{% block nav_topic_active %}active{% endblock %}
+{% block content %}
+<body> 
+<div class="container">
+<div class="row">	
+	<div class="col-xs-12 col-sm-8 col-md-8 col-lg-9">
+		<div class="panel panel-default">
+			<div class="panel-heading"> <h2>{{ entry_date }}</h2> 
+			</div>
+			<div class="panel-body">
+				{% for entry in entries %}
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<a href="{% url 'learning_logs:show_entry' entry.id %}">
+						<h3>{{ entry.title }}</h3></a>
+						<p>
+						<span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; {{ topic.owner }}&nbsp;&nbsp;
+						<span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp; {{ entry.created_date|date:'Y-d-m, H:i' }}
+						</p>
+						<small>
+						<a href="{% url 'learning_logs:edit_entry' entry.id %}">edit entry</a>
+						<a href="{% url 'learning_logs:del_entry' entry.id %}">delete entry</a>
+						</small>
+					</div>
+					<div class="panel-body">
+						{{ entry.text|striptags|truncatechars_html:50 }}
+					</div>
+				</div> 
+				{% empty %}
+					There are no entries for this topic yet.
+				{% endfor %}
+			</div>
+		</div>
+		<div class="paginator">
+			<ul class="pagination">
+			 {# 上一页 #}
+				<li >
+				{% if page_of_entries.has_previous %}
+				 <a href="?page={{ page_of_entries.previous_page_number }}" aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+				{% else %}
+					<span aria-hidden="true">&laquo;</span>
+				{% endif %}	 
+				</li>
+				{# 全部页码 #}
+				{% for page_num in page_range %}
+					{% if page_num == page_of_entries.number %}
+						<li class="active"><span>{{page_num}}</span></li>
+					{% else %}
+						{% if page_num == '...' %}
+							<li><span>{{page_num}} </span></li>
+						{% else %}
+							<li><a href="?page={{ page_num }}">{{page_num}} </a></li>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+				{# 下一页 #}
+				<li>
+					{% if page_of_entries.has_next %}
+						 <a href="?page={{ page_of_entries.next_page_number}}" aria-label="Next">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					{% else %}
+						<span aria-hidden="true">&laquo;</span>
+					{% endif %}	 
+				</li>
+			 </ul>
+			<p>
+				一共有{{ page_of_entries.paginator.count}}篇博客,
+				当前第{{ page_of_entries.number }}页，
+				共{{ page_of_entries.paginator.num_pages }}页
+			</p>
+		</div>
+	</div>
+	<div class="hidden-xs col-sm-4 col-md-4 col-lg-3">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Topic</h3>
+			</div>
+			<div class="panel-body">
+				<ul style="list-style-type:none;">
+					{% for topic in topics %}
+					<li>
+					<h3>
+						<a href="{% url 'learning_logs:topic' topic.id %}"  style="color:#000">{{ topic }}</a>({{topic.entry_count}})
+					</h3>
+					</li>
+					{% empty %}
+					<li>No topics have been added yet.</li>
+					{% endfor %}
+				</ul>
+				<h3><a href="{% url 'learning_logs:new_topic' %}" style="color:#000">
+					Add new topic</a>
+				</h3>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+			
+			
+			
+ 	<style text="css/text">
+	div.panel-heading a{
+		color:#000;
+	}
+	div.paginator{
+		text-align:center;
+	}
+	</style>
+ </body> 
+{% endblock content %}
+

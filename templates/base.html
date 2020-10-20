@@ -1,0 +1,65 @@
+{% load bootstrap3 %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Learning Log</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+	<nav class="navbar navbar-default navbar-static-top">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed"
+			    data-toggle="collapse" data-target="#navbar-collapse"
+			    aria-expanded="false" aria-controls="navbar">
+			    <span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="{% url 'learning_logs:index' %}">
+			Learning Log</a>
+		</div>
+		<div id="navbar-collapse" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li class="{% block nav_learninglog_active %}{% endblock %}">
+					<a href="{% url 'learning_logs:index' %}">首页</a></li>
+				<li class="{% block nav_topic_active %}{% endblock %}">
+					<a href="{% url 'learning_logs:topics' %}">博客</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				{% if user.is_authenticated %}
+					<li class="dropdown">
+					  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{user.username}}<span class="caret"></span></a>
+					  <ul class="dropdown-menu">
+						<li><a href="{% url 'user_info' %}">个人信息</a></li>
+						<li><a href="{% url 'logout' %}?from={{request.get_full_path }}">退出</a></li>
+					  </ul>
+					</li>
+				{% else %}
+					<li><a href="{% url 'login' %}?from={{request.get_full_path}}">登录</a></li>
+					<li><a href="{% url 'register' %}?from={{request.get_full_path}}">注册</a></li>
+				{% endif %}
+			</ul>
+		</div>
+		</div>
+	</nav>
+	<div class="container">
+	<div class="page-header">
+		{% block header %}{% endblock header %}
+	</div>
+	<div>
+		{% block content %}{% endblock content %}
+		{% block script_extends %}{% endblock %}
+	</div>
+	</div> 
+<style>
+	ul.navbar-right{
+		margin-right:0;
+	}
+</style>
+</body>
+</html>
+

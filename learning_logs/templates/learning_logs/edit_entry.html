@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block header %}
+  <h2><a href="{% url 'learning_logs:topic' topic.id %}"  style="color:#000">{{ topic }}</a></h2>
+  <h4>Edit entry:</h4>
+{% endblock header %}
+{% block nav_topic_active %}active{% endblock %}
+{% block content %}
+  <form action="{% url 'learning_logs:edit_entry' entry.id %}" method='post'>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name='submit'>save changes</button>
+    <button name='submit' action="learning_logs/topic.html">返回</button>
+  </form>
+{% endblock content %}
